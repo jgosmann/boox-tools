@@ -18,7 +18,7 @@ RE_CHAR_GROUPS = {
 }
 
 def create_pdf_regex(pattern):
-    return re.compile(pattern.format(**RE_CHAR_GROUPS))
+    return re.compile(pattern.format(**RE_CHAR_GROUPS).encode('ascii'))
 
 OBJ_RE = create_pdf_regex(
     '(?<={special})obj{ws}*<<.*>>{ws}*endobj(?={special})')
@@ -29,14 +29,14 @@ COLOR_RE = create_pdf_regex(
 
 
 def process_color(match, replacement):
-    prefix = '/C['
-    suffix = ']'
+    prefix = b'/C['
+    suffix = b']'
     diff = len(match.group(0)) - len(replacement) - len(prefix) - len(suffix)
     if diff < 0:
         raise NotImplementedError(
             'Replacement is too long and would require the size of the PDF '
             'file to change. This is not implemented.')
-    return prefix + diff * ' ' + replacement + suffix
+    return prefix + diff * b' ' + replacement.encode('ascii') + suffix
 
 def process_obj(match, color_string):
     is_annot = ANNOT_RE.search(match.group(0))

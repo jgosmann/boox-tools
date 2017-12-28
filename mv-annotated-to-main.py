@@ -1,5 +1,7 @@
 #!/usr/bin/env python
 
+from __future__ import print_function
+
 import argparse
 import os
 import os.path
@@ -14,7 +16,7 @@ def process(filename):
     if match is not None:
         new_filename = match.group(1) + '.pdf'
         os.rename(filename, new_filename)
-        print '{} -> {}'.format(filename, new_filename)
+        print('{} -> {}'.format(filename, new_filename))
 
 
 if __name__ == '__main__':
